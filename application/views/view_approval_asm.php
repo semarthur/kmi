@@ -44,7 +44,7 @@
           </li>
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
-            <a href="<?php echo base_url().'web/profile_asm' ?>" class="dropdown-toggle" data-toggle="dropdown">
+            <a href="<?php echo base_url().'web/profile' ?>" class="dropdown-toggle" data-toggle="dropdown">
               <span class="hidden-xs"><?php echo $this->session->userdata('email') ?></span>
             </a>
           </li>
@@ -85,19 +85,11 @@
     <section class="content">
       <!-- Small boxes (Stat box) -->
       <div class="row">
-       <?php 
-       $userdata = $this->session->userdata('email');
-       $get_departemen_asm = $this->m_data->get_jabatan_sekarang($userdata)->result();
-       $departemen_sekarang_asm = $get_departemen_asm[0]->Departemen;
-       $koneksi = mysqli_connect("localhost","root","","newkmi");
-       $ntba = mysqli_query($koneksi,"SELECT COUNT(approvalstatus) AS 'apsm' FROM form WHERE approvalstatus='Pending' AND dari LIKE \"%$departemen_sekarang_asm%\"");
-       $countntba = mysqli_fetch_assoc($ntba);
-       ?>
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
           <div class="small-box bg-yellow">
             <div class="inner">
-              <h3><?php echo $printntba = $countntba['apsm'] ?></h3>
+              <h3><?php echo "TBD" ?></h3>
 
               <p>Need to be Approved</p>
             </div>
@@ -106,6 +98,16 @@
             </div>
           </div>
         </div>        
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-aqua">
+            <div class="inner">
+              <h4>Form Approval</h4>
+            </div>
+            <a href="<?php echo base_url().'web/form_barang_masuk' ?>" class="small-box-footer">Klik Disini <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
         <!-- ./col -->
       </div>
       <!-- /.row -->
@@ -157,7 +159,7 @@
                   <td><?php echo $f->urgency ?></td>
                   <td><?php echo $f->approvalstatus ?></td>
                   <td><?php echo $f->process ?></td>
-                  <td><a class="btn btn-block btn-xs" href="<?php echo base_url()?>web/see_details_approval_asm?noticket=<?php echo $f->noticket ?>"> SEE DETAILS </a></td>
+                  <td><a class="btn btn-block btn-xs" href="<?php echo base_url()?>web/see_details?noticket=<?php echo $f->noticket ?>"> SEE DETAILS </a></td>
                 </tr>
                   <?php } ?>
               </table>

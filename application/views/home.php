@@ -8,8 +8,6 @@
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
   <link rel="stylesheet" href="<?php echo base_url ('assets/template/bower_components')?>/bootstrap/dist/css/bootstrap.min.css">
-  <!-- datatables -->
-  <link rel="stylesheet" href="<?php echo base_url ('assets/template/bower_components')?>/datatables.net-bs/css/dataTables.bootstrap.min.css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="<?php echo base_url ('assets/template/bower_components')?>/font-awesome/css/font-awesome.min.css">
   <!-- Ionicons -->
@@ -163,11 +161,20 @@
           <div class="box">
             <div class="box-header">
               <h3 class="box-title">Status Check</h3>
+
+              <div class="box-tools">
+                <div class="input-group input-group-sm hidden-xs" style="width: 150px;">
+                  <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+
+                  <div class="input-group-btn">
+                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                  </div>
+                </div>
+              </div>
             </div>
             <!-- /.box-header -->
             <div class="box-body table-responsive no-padding">
-              <table class="table table-hover" id="table1">
-                <thead>
+              <table class="table table-hover">
                 <tr>
                   <th>No. Ticket</th>
                   <th>Name</th>
@@ -177,13 +184,12 @@
                   <th>Case</th>
                   <th>Duty</th>
                   <th>Date of Expectancy Completion</th>
+                  <th>System Integrated</th>
                   <th>Urgency</th>
                   <th>Approval Status</th>
                   <th>Status</th>
                   <th>Action</th>
                 </tr>
-                </thead>
-                <tbody>  
                 <?php foreach ($form as $f) { ?>
                 <tr>
                   <td><?php echo $f->noticket ?></td>
@@ -194,16 +200,25 @@
                   <td><?php echo $f->kasus ?></td>
                   <td><?php echo $f->duty ?></td>
                   <td><?php echo $f->dateoec ?></td>
+                  <td><?php echo $f->systemint ?></td>
                   <td><?php echo $f->urgency ?></td>
                   <td><?php echo $f->approvalstatus ?></td>
                   <td><?php echo $f->process ?></td>
                   <td><a class="btn btn-block btn-xs" href="<?php echo base_url()?>web/see_details?noticket=<?php echo $f->noticket ?>"> SEE DETAILS </a></td>
                 </tr>
-                <?php } ?>
-                </tbody>
+                  <?php } ?>
               </table>
             </div>
             <!-- /.box-body -->
+            <div class="box-footer clearfix">
+              <ul class="pagination pagination-sm no-margin pull-right">
+                <li><a href="#">&laquo;</a></li>
+                <li><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">&raquo;</a></li>
+              </ul>
+            </div>
           </div>
           <!-- /.box -->
         </div>
@@ -219,20 +234,5 @@
     <strong>Copyright &copy; 2018-2019 <a href="https://kawasaki-motor.co.id">Kawasaki Motor</a>.</strong> All rights
     reserved.
   </footer>
-
-  <script src="<?php echo base_url ('assets/template/bower_components/jquery')?>/dist/jquery.min.js"></script>
-  <script src="<?php echo base_url ('assets/template/bower_components/bootstrap')?>/dist/js/bootstrap.min.js"></script>
-  <script src="<?php echo base_url ('assets/template/bower_components/jquery-slimscroll')?>/jquery.slimscroll.min.js"></script>
-  <script src="<?php echo base_url ('assets/template/dist')?>/js/adminlte.min.js"></script>
-
-  <script src="<?php echo base_url ('assets/template/bower_components/datatables.net')?>/js/jquery.dataTables.min.js"></script>
-  <script src="<?php echo base_url ('assets/template/bower_components/datatables.net-bs')?>/js/dataTables.bootstrap.min.js"></script>
-
-  <script>
-    $(document).ready(function() {
-      $('#table1').DataTable()
-    })
-  </script>
-
 </body>
 </html>

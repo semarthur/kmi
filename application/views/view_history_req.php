@@ -44,7 +44,7 @@
           </li>
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
-            <a href="<?php echo base_url().'web/profile_req' ?>" class="dropdown-toggle" data-toggle="dropdown">
+            <a href="<?php echo base_url().'web/profile' ?>" class="dropdown-toggle" data-toggle="dropdown">
               <span class="hidden-xs"><?php echo $this->session->userdata('email') ?></span>
             </a>
           </li>
