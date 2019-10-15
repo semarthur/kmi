@@ -44,7 +44,7 @@
           </li>
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
-            <a href="<?php echo base_url().'web/profile_req' ?>" class="dropdown-toggle" data-toggle="dropdown">
+            <a href="<?php echo base_url().'web/profile_dh' ?>" class="dropdown-toggle" data-toggle="dropdown">
               <span class="hidden-xs"><?php echo $this->session->userdata('email') ?></span>
             </a>
           </li>
@@ -63,9 +63,11 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">REQUISITION FORM SYSTEM</li>
-        <li><a href="<?php echo base_url().'web/home_requester' ?>"><i class="fa fa-table"></i> <span>Home</span></a></li>
-        <li><a href="<?php echo base_url().'web/form_req' ?>"><i class="fa fa-files-o"></i> <span>Create New Form</span></a></li>
-        <li><a href="<?php echo base_url().'web/history_req' ?>"><i class="fa fa-book"></i> <span>History</span></a></li>
+        <li><a href="<?php echo base_url().'web/home_dh' ?>"><i class="fa fa-table"></i> <span>Home</span></a></li>
+        <li><a href="<?php echo base_url().'web/form_dh' ?>"><i class="fa fa-files-o"></i> <span>Create New Form</span></a></li>
+        <li><a href="<?php echo base_url().'web/approval_dh' ?>"><i class="fa fa-edit"></i> <span>Approval</span></a></li>
+        <li><a href="<?php echo base_url().'web/statistics_dh' ?>"><i class="ion ion-stats-bars"></i> <span>Statistics</span></a></li>
+        <li><a href="<?php echo base_url().'web/history_dh' ?>"><i class="fa fa-book"></i> <span>History</span></a></li>
     </section>
     <!-- /.sidebar -->
   </aside>
@@ -75,19 +77,60 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        History
-        <small>Form Done</small>
+        Approval
+        <small>Approval Menu</small>
       </h1>
     </section>
 
     <!-- Main content -->
     <section class="content">
+      <!-- Small boxes (Stat box) -->
+      <div class="row">
+       <?php 
+       $userdata = $this->session->userdata('email');
+       $get_departemen_dh_approval = $this->m_data->get_jabatan_sekarang($userdata)->result();
+       $departemen_sekarang_dh_approval = $get_departemen_dh_approval[0]->Departemen;
+       $koneksi = mysqli_connect("localhost","root","","newkmi");
+       $ntba = mysqli_query($koneksi,"SELECT COUNT(approvalstatus) AS 'apsm' FROM form WHERE approvalstatus='Approved by A. Manager' AND dari LIKE \"%$departemen_sekarang_dh_approval%\"");
+       $pending = mysqli_query($koneksi,"SELECT COUNT(approvalstatus) AS 'asp' FROM form WHERE approvalstatus='Pending' AND dari LIKE \"%$departemen_sekarang_dh_approval%\"");
+       $countntba = mysqli_fetch_assoc($ntba);
+       $countp = mysqli_fetch_assoc($pending);
+       ?>
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-yellow">
+            <div class="inner">
+              <h3><?php echo $printntba = $countntba['apsm'] ?></h3>
+
+              <p>Need to be Approved</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-stats-bars"></i>
+            </div>
+          </div>
+        </div>        
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-red">
+            <div class="inner">
+              <h3><?php echo $printp = $countp['asp'] ?></h3>
+
+              <p>Pending</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-stats-bars"></i>
+            </div>
+          </div>
+        </div>        
+        <!-- ./col -->
+      </div>
       <!-- /.row -->
       <div class="row">
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header">
-              <h3 class="box-title">Completed Task</h3>
+              <h3 class="box-title">Approval List</h3>
 
               <div class="box-tools">
                 <div class="input-group input-group-sm hidden-xs" style="width: 150px;">
@@ -115,24 +158,25 @@
                   <th>Urgency</th>
                   <th>Approval Status</th>
                   <th>Status</th>
+                  <th>Action</th>
                 </tr>
-                <?php
-                foreach($form_done as $fd){
-                  echo "<tr>";
-                  echo "<td>".$fd->noticket."</td>";
-                  echo "<td>".$fd->nama."</td>";
-                  echo "<td>".$fd->dari."</td>";
-                  echo "<td>".$fd->untuk."</td>";
-                  echo "<td>".$fd->date."</td>";
-                  echo "<td>".$fd->kasus."</td>";
-                  echo "<td>".$fd->duty."</td>";
-                  echo "<td>".$fd->dateoec."</td>";
-                  echo "<td>".$fd->systemint."</td>";
-                  echo "<td>".$fd->urgency."</td>";
-                  echo "<td>".$fd->approvalstatus."</td>";
-                  echo "<td>".$fd->process."</td>";
-                }
-                ?>
+                <?php foreach ($form as $f) { ?>
+                <tr>
+                  <td><?php echo $f->noticket ?></td>
+                  <td><?php echo $f->nama ?></td>
+                  <td><?php echo $f->dari ?></td>
+                  <td><?php echo $f->untuk ?></td>
+                  <td><?php echo $f->date ?></td>
+                  <td><?php echo $f->kasus ?></td>
+                  <td><?php echo $f->duty ?></td>
+                  <td><?php echo $f->dateoec ?></td>
+                  <td><?php echo $f->systemint ?></td>
+                  <td><?php echo $f->urgency ?></td>
+                  <td><?php echo $f->approvalstatus ?></td>
+                  <td><?php echo $f->process ?></td>
+                  <td><a class="btn btn-block btn-xs" href="<?php echo base_url()?>web/see_details_approval_dh?noticket=<?php echo $f->noticket ?>"> SEE DETAILS </a></td>
+                </tr>
+                  <?php } ?>
               </table>
             </div>
             <!-- /.box-body -->

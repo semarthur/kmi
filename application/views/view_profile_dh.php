@@ -44,7 +44,7 @@
           </li>
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
-            <a href="<?php echo base_url().'web/profile_req' ?>" class="dropdown-toggle" data-toggle="dropdown">
+            <a href="<?php echo base_url().'web/profile_asm' ?>" class="dropdown-toggle" data-toggle="dropdown">
               <span class="hidden-xs"><?php echo $this->session->userdata('email') ?></span>
             </a>
           </li>
@@ -63,9 +63,11 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">REQUISITION FORM SYSTEM</li>
-        <li><a href="<?php echo base_url().'web/home_requester' ?>"><i class="fa fa-table"></i> <span>Home</span></a></li>
-        <li><a href="<?php echo base_url().'web/form_req' ?>"><i class="fa fa-files-o"></i> <span>Create New Form</span></a></li>
-        <li><a href="<?php echo base_url().'web/history_req' ?>"><i class="fa fa-book"></i> <span>History</span></a></li>
+        <li><a href="<?php echo base_url().'web/home_dh' ?>"><i class="fa fa-table"></i> <span>Home</span></a></li>
+          <li><a href="<?php echo base_url().'web/form_dh' ?>"><i class="fa fa-files-o"></i> <span>Create New Form</span></a></li>
+          <li><a href="<?php echo base_url().'web/approval_dh' ?>"><i class="fa fa-edit"></i> <span>Approval</span></a></li>
+          <li><a href="<?php echo base_url().'web/statistics_dh' ?>"><i class="ion ion-stats-bars"></i> <span>Statistics</span></a></li>
+          <li><a href="<?php echo base_url().'web/history_dh' ?>"><i class="fa fa-book"></i> <span>History</span></a></li>
     </section>
     <!-- /.sidebar -->
   </aside>
@@ -75,71 +77,42 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        History
-        <small>Form Done</small>
+        Profile
+        <small>User Profile</small>
       </h1>
     </section>
 
     <!-- Main content -->
     <section class="content">
-      <!-- /.row -->
-      <div class="row">
-        <div class="col-xs-12">
-          <div class="box">
-            <div class="box-header">
-              <h3 class="box-title">Completed Task</h3>
+      <!-- Profile Image -->
+          <div class="box box-primary">
+            <div class="box-body box-profile">
+              <img class="profile-user-img img-responsive img-circle" src="<?php echo ASSET_PATH; ?>css/profile/logo.png" alt="User profile picture">
 
-              <div class="box-tools">
-                <div class="input-group input-group-sm hidden-xs" style="width: 150px;">
-                  <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+              <h3 class="profile-username text-center"><?php echo $akun->nama ?></h3>
 
-                  <div class="input-group-btn">
-                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                  </div>
-                </div>
-              </div>
+              <p class="text-muted text-center"><?php echo $this->session->userdata('email') ?></p>
+
+              <ul class="list-group list-group-unbordered">
+                <li class="list-group-item">
+                  <b>Nama</b> <a class="pull-right"><?php echo $akun->nama ?></a>
+                </li>
+                <li class="list-group-item">
+                  <b>E-mail</b> <a class="pull-right"><?php echo $this->session->userdata('email') ?></a>
+                </li>
+                <li class="list-group-item">
+                  <b>Jabatan</b> <a class="pull-right"><?php echo $akun->Jabatan ?></a>
+                </li>
+                <li class="list-group-item">
+                  <b>Departemen</b> <a class="pull-right"><?php echo $akun->Departemen ?></a>
+                </li>
+                <li class="list-group-item">
+                  <b>Telepon</b> <a class="pull-right"><?php echo $akun->telepon ?></a>
+                </li>
+              </ul>
+
+              <a href="#" class="btn btn-primary btn-block"><b>EDIT ACCOUNT</b></a>
             </div>
-            <!-- /.box-header -->
-            <div class="box-body table-responsive no-padding">
-              <table class="table table-hover">
-                <tr>
-                  <th>No. Ticket</th>
-                  <th>Name</th>
-                  <th>From</th>
-                  <th>To</th>
-                  <th>Date</th>
-                  <th>Case</th>
-                  <th>Duty</th>
-                  <th>Date of Expectancy Completion</th>
-                  <th>System Integrated</th>
-                  <th>Urgency</th>
-                  <th>Approval Status</th>
-                  <th>Status</th>
-                </tr>
-                <?php
-                foreach($form_done as $fd){
-                  echo "<tr>";
-                  echo "<td>".$fd->noticket."</td>";
-                  echo "<td>".$fd->nama."</td>";
-                  echo "<td>".$fd->dari."</td>";
-                  echo "<td>".$fd->untuk."</td>";
-                  echo "<td>".$fd->date."</td>";
-                  echo "<td>".$fd->kasus."</td>";
-                  echo "<td>".$fd->duty."</td>";
-                  echo "<td>".$fd->dateoec."</td>";
-                  echo "<td>".$fd->systemint."</td>";
-                  echo "<td>".$fd->urgency."</td>";
-                  echo "<td>".$fd->approvalstatus."</td>";
-                  echo "<td>".$fd->process."</td>";
-                }
-                ?>
-              </table>
-            </div>
-            <!-- /.box-body -->
-          </div>
-          <!-- /.box -->
-        </div>
-      </div>
     </section>
     <!-- /.content -->
   </div>
