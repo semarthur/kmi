@@ -14,9 +14,6 @@ class Ahp{
             $this->dataset[$value->id]["duty"] = $value->duty;
             $this->dataset[$value->id]["urgency"] = $value->urgency;
         }
-        var_dump($this->dataset);
-        echo("<br><br>");
-        
     }
     
 
@@ -29,13 +26,7 @@ class Ahp{
             [1, $datediff_urgency, $datediff_duty],
             [$urgency_datediff, 1, $urgency_duty],
             [$duty_datediff, $duty_urgency, 1]
-        ];
-
-        var_dump($this->criterion_matrix);
-        echo("<br>");
-        echo("<br>");
-        
-
+        ];        
     }
 
     public function normalize_criterion()
@@ -53,10 +44,6 @@ class Ahp{
                 $this->criterion_matrix[$i][$j] /= $normalizator_sum[$j]; 
             }
         }
-        var_dump($this->criterion_matrix);
-        echo("<br>");
-        echo("<br>");
-
     }
     
     public function build_criterion_weight()
@@ -65,9 +52,6 @@ class Ahp{
         for ($i=0; $i < count($this->criterion_matrix); $i++) { 
             $this->criterion_weight[$i] = array_sum($this->criterion_matrix[$i]) / count($this->criterion_matrix[$i]);
         }
-        var_dump($this->criterion_weight);
-        echo("<br>");
-        echo("<br>");
     }
 
     public function get_ranked_data()

@@ -199,7 +199,7 @@ class Web extends CI_Controller {
 		$this->load->view('view_history_req',$data);
 	}
 
-	public function tes_gan()
+	public function home_sorted_by_ahp()
 	{
 		$datediff_urgency = 5;
 		$datediff_duty = 3;
