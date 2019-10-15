@@ -198,4 +198,24 @@ class Web extends CI_Controller {
 		$data['form_done'] = $this->m_data->tampil_data_done_user()->result();
 		$this->load->view('view_history_req',$data);
 	}
+
+	public function tes_gan()
+	{
+		$datediff_urgency = 5;
+		$datediff_duty = 3;
+		$duty_urgency = 3;
+		$dataset = $this->m_data->get_by_date_duty_urgent()->result();
+		$this->load->library('ahp', $dataset);
+		$this->load->helper('array');
+		$this->ahp->init_criterion($datediff_urgency, $datediff_duty, $duty_urgency);
+		$this->ahp->normalize_criterion();
+		$this->ahp->build_criterion_weight();
+		$dataset = $this->m_data->tampil_data()->result();
+		$rank = $this->ahp->get_ranked_data();
+		$ranked_data = sort_by_id($dataset, $rank);
+		$data['form'] = $ranked_data;
+
+		$this->load->view('home', $data);
+
+	}
 }

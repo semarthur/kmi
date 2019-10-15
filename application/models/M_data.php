@@ -98,4 +98,29 @@ class M_data extends CI_Model{
     	$this->db->where($where);
     	$this->db->delete('form');
 	}
+
+	function get_by_date_duty_urgent()
+	{
+		return $this->db->query("SELECT tform.id,  
+			IF(DATEDIFF(tform.dateoec, tform.date) <= 3, 1, 
+			IF(DATEDIFF(tform.dateoec, tform.date) <= 7, 0.75,
+			IF(DATEDIFF(tform.dateoec, tform.date) <= 14, 0.5,
+			IF(DATEDIFF(tform.dateoec, tform.date) <= 21, 0.25, 0
+				)))) as datediff
+			,
+			case 
+					when tform.duty = 'Problem Solving' then '0'
+					when tform.duty = 'Additional / Change / Delete' then '0.25'
+					when tform.duty = 'Service / Repair' then '0.5'
+					when tform.duty = 'Installation' then '0.75'
+					when tform.duty = 'Training' then '1'
+				 end as duty
+			,
+			case 
+					when tform.urgency = 'immedietly' 	then '1'
+					when tform.urgency = 'normal' 		then '0'
+				 end as urgency
+			
+			FROM `form` as tform");
+	}
 }
