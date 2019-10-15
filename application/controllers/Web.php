@@ -47,7 +47,7 @@ class Web extends CI_Controller {
 					redirect('web/home_asm');
 				}elseif($pelogin->Jabatan == 'Dept Head'){
 					session_start();
-					redirect('web/home_req_dh');
+					redirect('web/home_dh');
 				}
 			}else{
 				?>
@@ -77,6 +77,11 @@ class Web extends CI_Controller {
 		$this->load->view('view_profile_asm',$akun);
 	}
 
+	public function profile_dh(){
+		$akun['akun'] = $this->db->get_where('account',array('email' => $this->session->userdata('email')))->row();
+		$this->load->view('view_profile_dh',$akun);
+	}
+
 	public function form(){
 		$this->load->view('view_form');
 	}
@@ -87,6 +92,10 @@ class Web extends CI_Controller {
 
 	public function form_asm(){
 		$this->load->view('view_form_asm');
+	}
+
+	public function form_dh(){
+		$this->load->view('view_form_dh');
 	}
 
 	public function home(){
@@ -102,6 +111,14 @@ class Web extends CI_Controller {
 	public function home_asm(){
 		$data['form'] = $this->m_data->tampil_data_user()->result();
 		$this->load->view('home_asm',$data);
+	}
+
+	public function home_dh(){
+		$userdata = $this->session->userdata('email');
+		$get_departemen_dh = $this->m_data->get_jabatan_sekarang($userdata)->result();
+		$departemen_sekarang_dh = $get_departemen_dh[0]->Departemen;
+		$data['form'] = $this->m_data->tampil_data_user_dh($departemen_sekarang_dh)->result();
+		$this->load->view('home_dh',$data);
 	}
 
 	public function see_details(){
@@ -122,6 +139,24 @@ class Web extends CI_Controller {
 		$this->load->view('view_details_req',$data);
 	}
 
+	public function see_details_approval_asm(){
+		if ( isset($_GET['noticket']) ) {
+			$noticket = $_GET['noticket'];
+		}
+		$where = array('noticket'=>$noticket);
+		$data['details'] = $this->m_data->tampil_details('form',$where)->result();
+		$this->load->view('view_details_approval_asm',$data);
+	}
+
+	public function see_details_approval_dh(){
+		if ( isset($_GET['noticket']) ) {
+			$noticket = $_GET['noticket'];
+		}
+		$where = array('noticket'=>$noticket);
+		$data['details'] = $this->m_data->tampil_details('form',$where)->result();
+		$this->load->view('view_details_approval_dh',$data);
+	}
+
 	public function see_details_asm(){
 		if ( isset($_GET['noticket']) ) {
 			$noticket = $_GET['noticket'];
@@ -129,6 +164,15 @@ class Web extends CI_Controller {
 		$where = array('noticket'=>$noticket);
 		$data['details'] = $this->m_data->tampil_details('form',$where)->result();
 		$this->load->view('view_details_asm',$data);
+	}
+
+	public function see_details_dh(){
+		if ( isset($_GET['noticket']) ) {
+			$noticket = $_GET['noticket'];
+		}
+		$where = array('noticket'=>$noticket);
+		$data['details'] = $this->m_data->tampil_details('form',$where)->result();
+		$this->load->view('view_details_dh',$data);
 	}
 
 	public function change_status(){
@@ -153,6 +197,14 @@ class Web extends CI_Controller {
 		$departemen_sekarang_asm = $get_departemen_asm[0]->Departemen;
 		$data['form'] = $this->m_data->tampil_data_approval_asm($departemen_sekarang_asm)->result();
 		$this->load->view('view_approval_asm',$data);
+	}
+
+	public function approval_dh(){
+		$userdata = $this->session->userdata('email');
+		$get_departemen_dh = $this->m_data->get_jabatan_sekarang($userdata)->result();
+		$departemen_sekarang_dh = $get_departemen_dh[0]->Departemen;
+		$data['form'] = $this->m_data->tampil_data_approval_asm($departemen_sekarang_dh)->result();
+		$this->load->view('view_approval_dh',$data);
 	}
 
 	public function inventory(){
@@ -189,6 +241,10 @@ class Web extends CI_Controller {
 		$this->load->view('view_statistics');
 	}
 
+	public function statistics_dh(){
+		$this->load->view('view_statistics_dh');
+	}
+
 	public function history(){
 		$data['form_done'] = $this->m_data->tampil_data_done()->result();
 		$this->load->view('view_history',$data);
@@ -197,6 +253,19 @@ class Web extends CI_Controller {
 	public function history_req(){
 		$data['form_done'] = $this->m_data->tampil_data_done_user()->result();
 		$this->load->view('view_history_req',$data);
+	}
+
+	public function history_asm(){
+		$data['form_done'] = $this->m_data->tampil_data_done_user()->result();
+		$this->load->view('view_history_asm',$data);
+	}
+
+	public function history_dh(){
+		$userdata = $this->session->userdata('email');
+		$get_departemen_dh_done = $this->m_data->get_jabatan_sekarang($userdata)->result();
+		$departemen_sekarang_dh_done = $get_departemen_dh_done[0]->Departemen;
+		$data['form_done'] = $this->m_data->tampil_data_done_dh($departemen_sekarang_dh_done)->result();
+		$this->load->view('view_history_dh',$data);
 	}
 
 	public function home_sorted_by_ahp()
@@ -218,4 +287,7 @@ class Web extends CI_Controller {
 		$this->load->view('home', $data);
 
 	}
+
+	/*udah jadi Web sama M_data broo*/
+
 }
