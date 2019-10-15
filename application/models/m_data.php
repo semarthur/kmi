@@ -17,6 +17,10 @@ class M_data extends CI_Model{
 		return $this->db->query("select * from form where e_mail LIKE \"%$userdata%\" UNION select * from form_na where e_mail LIKE \"%$userdata%\" ");
 	}
 
+	function tampil_data_user_dh($departemen_sekarang_dh){
+		return $this->db->query("select * from form where dari LIKE \"%$departemen_sekarang_dh%\" UNION select * from form_na where dari LIKE \"%$departemen_sekarang_dh%\"");
+	}
+
 	function tampil_details($table,$where){
 		return $this->db->get_where($table,$where);
 	}
@@ -27,6 +31,10 @@ class M_data extends CI_Model{
 
 	function tampil_data_done(){
 		return $this->db->query("select * from form_done");
+	}
+
+	function tampil_data_done_dh($departemen_sekarang_dh_done){
+		return $this->db->query("select * from form_done where dari LIKE \"%$departemen_sekarang_dh_done%\"");
 	}
 
 	function tampil_data_done_user(){

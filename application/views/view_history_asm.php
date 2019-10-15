@@ -44,7 +44,7 @@
           </li>
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
-            <a href="<?php echo base_url().'web/profile_req' ?>" class="dropdown-toggle" data-toggle="dropdown">
+            <a href="<?php echo base_url().'web/profile_asm' ?>" class="dropdown-toggle" data-toggle="dropdown">
               <span class="hidden-xs"><?php echo $this->session->userdata('email') ?></span>
             </a>
           </li>
@@ -63,9 +63,10 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">REQUISITION FORM SYSTEM</li>
-        <li><a href="<?php echo base_url().'web/home_requester' ?>"><i class="fa fa-table"></i> <span>Home</span></a></li>
-        <li><a href="<?php echo base_url().'web/form_req' ?>"><i class="fa fa-files-o"></i> <span>Create New Form</span></a></li>
-        <li><a href="<?php echo base_url().'web/history_req' ?>"><i class="fa fa-book"></i> <span>History</span></a></li>
+        <li><a href="<?php echo base_url().'web/home_asm' ?>"><i class="fa fa-table"></i> <span>Home</span></a></li>
+        <li><a href="<?php echo base_url().'web/form_asm' ?>"><i class="fa fa-files-o"></i> <span>Create New Form</span></a></li>
+        <li><a href="<?php echo base_url().'web/approval_asm' ?>"><i class="fa fa-edit"></i> <span>Approval</span></a></li>
+        <li><a href="<?php echo base_url().'web/history_asm' ?>"><i class="fa fa-book"></i> <span>History</span></a></li>
     </section>
     <!-- /.sidebar -->
   </aside>
