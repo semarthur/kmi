@@ -268,4 +268,6 @@ class Web extends CI_Controller {
 		$this->load->view('view_history_dh',$data);
 	}
 
+	/*udah jadi Web sama M_data broo*/
+
 }
