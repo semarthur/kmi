@@ -222,8 +222,9 @@
                 <h3 class="box-title">Priority Task Ranking</h3>
               </div>
               <div class="box-body table-responsive no-padding">
-                  <table class="table table-hover">
+                  <table class="table table-hover" id="recommendation-table">
                     <tr>
+                      <th>Rank Task</th>
                       <th>No. Ticket</th>
                       <th>Name</th>
                       <th>From</th>
@@ -236,10 +237,11 @@
                       <th>Urgency</th>
                       <th>Approval Status</th>
                       <th>Status</th>
-                      <th>Action</th>
                     </tr>
+                    <?php $count = 0;?>
                     <?php foreach ($ranked_data as $f) { ?>
                     <tr>
+                      <td><?=++$count;?></td>
                       <td><?php echo $f->noticket ?></td>
                       <td><?php echo $f->nama ?></td>
                       <td><?php echo $f->dari ?></td>
@@ -252,9 +254,8 @@
                       <td><?php echo $f->urgency ?></td>
                       <td><?php echo $f->approvalstatus ?></td>
                       <td><?php echo $f->process ?></td>
-                      <td><a class="btn btn-block btn-xs" href="<?php echo base_url()?>web/see_details?noticket=<?php echo $f->noticket ?>"> SEE DETAILS </a></td>
                     </tr>
-                      <?php } ?>
+                      <?php  } ?>
                   </table>
                 </div>
             </div>
@@ -355,6 +356,9 @@
           updateTextInput(datediff_urgency);
           updateTextInput(datediff_duty);
           updateTextInput(duty_urgency);
+
+          $("#recommendation-table").find('tr')[1].bgColor = "#f65058";
+          $("#recommendation-table").find('tr')[2].bgColor = "#fbde44";
 
                   
           function changeValue(val) {
