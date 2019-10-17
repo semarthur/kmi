@@ -162,14 +162,18 @@
               <div class="box-header">
                 <h3 class="box-title">Priority Recommendation using AHP (Analytical Hierarchy Process)</h3>
               </div>
-              <form class="box-body" method="GET" action="<?=base_url()?>web/home_sorted_by_ahp">
-                <div class="col-md-12">
+              <div class="box-body">
+                <form class="col-md-12" method="GET" action="<?=base_url()?>web/home_sorted_by_ahp">
+                  
+                  <div class="row">
+                    <div class="alert"><?=$consistency?></div>
+                  </div>
                   <div class="row" style="height: 5em;">
                     <div class="col-md-1">
                       <h5>Jangka waktu pengerjaan</h5>
                     </div>
                     <div class="col-md-5" id="form-group" style="margin-top: auto; margin-bottom: auto;">
-                      <input id="datediff_urgency" name="datediff_urgency" style="width: 100%;" type="range" list="tickmarks" min="0" max="16" kriteria1="Jangka waktu pengerjaan" kriteria2="Urgensi" onchange="updateTextInput(this)">
+                      <input id="datediff_urgency" name="datediff_urgency" style="width: 100%;" type="range" value="<?=$input_datediff_urgency?>" list="tickmarks" min="0" max="16" kriteria1="Jangka waktu pengerjaan" kriteria2="Urgensi" onchange="updateTextInput(this)">
                     </div>
                     <div class="col-md-1">
                       <h5>Urgensi</h5>
@@ -183,7 +187,7 @@
                       <h5>Jangka waktu pengerjaan</h5>
                     </div>
                     <div class="col-md-5" id="form-group">
-                      <input id="datediff_duty" name="datediff_duty" style="width: 100%;" type="range" list="tickmarks" min="0" max="16" kriteria1="Jangka waktu pengerjaan" kriteria2="Duty" onchange="updateTextInput(this)">
+                      <input id="datediff_duty" name="datediff_duty" style="width: 100%;" type="range" value="<?=$input_datediff_duty?>" list="tickmarks" min="0" max="16" kriteria1="Jangka waktu pengerjaan" kriteria2="Duty" onchange="updateTextInput(this)">
                     </div>
                     <div class="col-md-1">
                       <h5>Duty</h5>
@@ -197,7 +201,7 @@
                       <h5>Duty</h5>
                     </div>
                     <div class="col-md-5" id="form-group">
-                      <input id="duty_urgency" name="duty_urgency" style="width: 100%;" type="range" list="tickmarks" min="0" max="16" kriteria1="Duty" kriteria2="Urgensi" onchange="updateTextInput(this)">
+                      <input id="duty_urgency" name="duty_urgency" style="width: 100%;" type="range" value="<?=$input_duty_urgency?>" list="tickmarks" min="0" max="16" kriteria1="Duty" kriteria2="Urgensi" onchange="updateTextInput(this)">
                     </div>
                     <div class="col-md-1">
                       <h5>Urgensi</h5>
@@ -206,11 +210,53 @@
                       <div id="duty_urgency_alert" class="alert alert-info" style="font-size: 90%"></div>
                     </div>
                   </div>
-                  <div class="col-2">
-                      <input type='submit' value="Submit" class="btn btn-primary" onclick="input()">
+                  <div class="col-md-12">
+                      <input type='submit' value="Submit" class="btn btn-primary" > &nbsp &nbsp 
+                      <a href="<?=base_url()?>web/home" class="btn btn-danger">Reset</a>
                   </div>
                 </form>
+                <div class="col-md-12">
+                </div>
               </div>
+              <div class="box-header">
+                <h3 class="box-title">Priority Task Ranking</h3>
+              </div>
+              <div class="box-body table-responsive no-padding">
+                  <table class="table table-hover">
+                    <tr>
+                      <th>No. Ticket</th>
+                      <th>Name</th>
+                      <th>From</th>
+                      <th>To</th>
+                      <th>Date</th>
+                      <th>Case</th>
+                      <th>Duty</th>
+                      <th>Date of Expectancy Completion</th>
+                      <th>System Integrated</th>
+                      <th>Urgency</th>
+                      <th>Approval Status</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                    <?php foreach ($ranked_data as $f) { ?>
+                    <tr>
+                      <td><?php echo $f->noticket ?></td>
+                      <td><?php echo $f->nama ?></td>
+                      <td><?php echo $f->dari ?></td>
+                      <td><?php echo $f->untuk ?></td>
+                      <td><?php echo $f->date ?></td>
+                      <td><?php echo $f->kasus ?></td>
+                      <td><?php echo $f->duty ?></td>
+                      <td><?php echo $f->dateoec ?></td>
+                      <td><?php echo $f->systemint ?></td>
+                      <td><?php echo $f->urgency ?></td>
+                      <td><?php echo $f->approvalstatus ?></td>
+                      <td><?php echo $f->process ?></td>
+                      <td><a class="btn btn-block btn-xs" href="<?php echo base_url()?>web/see_details?noticket=<?php echo $f->noticket ?>"> SEE DETAILS </a></td>
+                    </tr>
+                      <?php } ?>
+                  </table>
+                </div>
             </div>
           </div>
       </div>

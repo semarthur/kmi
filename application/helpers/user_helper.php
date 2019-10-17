@@ -10,4 +10,15 @@
 
         return $sorted;
     }
+
+    function changeValueCriterion($val) {
+
+        if ($val == 8) {
+            return 1;
+        }else if ($val > 8) {
+            return 1 / ($val - 7);
+        }else{
+            return abs ($val - 9);
+        }
+  }
 ?>

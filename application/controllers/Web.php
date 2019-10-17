@@ -270,21 +270,29 @@ class Web extends CI_Controller {
 
 	public function home_sorted_by_ahp()
 	{
-		$datediff_urgency = 5;
-		$datediff_duty = 3;
-		$duty_urgency = 3;
+		$this->load->helper('user');
+		$data['input_datediff_urgency'] = $this->input->get('datediff_urgency');
+		$data['input_datediff_duty'] = $this->input->get('datediff_duty');
+		$data['input_duty_urgency'] = $this->input->get('duty_urgency');
+		$datediff_urgency = changeValueCriterion($data['input_datediff_urgency']);
+		$datediff_duty = changeValueCriterion($data['input_datediff_duty']);
+		$duty_urgency = changeValueCriterion($data['input_duty_urgency']);
+
 		$dataset = $this->m_data->get_by_date_duty_urgent()->result();
 		$this->load->library('ahp', $dataset);
-		$this->load->helper('array');
 		$this->ahp->init_criterion($datediff_urgency, $datediff_duty, $duty_urgency);
 		$this->ahp->normalize_criterion();
 		$this->ahp->build_criterion_weight();
 		$dataset = $this->m_data->tampil_data()->result();
 		$rank = $this->ahp->get_ranked_data();
 		$ranked_data = sort_by_id($dataset, $rank);
-		$data['form'] = $ranked_data;
+		$data['form'] = $dataset;
+		$data['ranked_data'] = array_slice($ranked_data, 0, 3, true);
 
-		$this->load->view('home', $data);
+		$this->ahp->calculate_eigen_max();
+		$data['consistency'] = $this->ahp->AHPconsistency();
+
+		$this->load->view('home_ahp', $data);
 
 	}
 
