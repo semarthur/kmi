@@ -37,9 +37,21 @@
         <ul class="nav navbar-nav">
           <!-- Notifications: style can be found in dropdown.less -->
           <li class="dropdown notifications-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <a href="<?php echo base_url().'web/notif_asm' ?>" >
               <i class="fa fa-bell-o"></i>
-              <span class="label label-warning">New</span>
+              <?php 
+              $userdata = $this->session->userdata('email');
+              $koneksi = mysqli_connect("localhost","root","","newkmi");
+              $countnotif = mysqli_query($koneksi,"SELECT COUNT(email_track_1) AS 'nreq' FROM notifikasi WHERE status='unread' AND email_track_1 LIKE \"%$userdata%\"");
+              $countnotifvalue = mysqli_fetch_assoc($countnotif);
+              ?>
+
+              <?php if($countnotifvalue == 0) {?>
+                <span class="label label-warning"></span>
+              <?php } else {?>
+                <span class="label label-warning"><?php echo $printop = $countnotifvalue['nreq'] ?></span>
+              <?php } ?>
+              
             </a>
           </li>
           <!-- User Account: style can be found in dropdown.less -->
@@ -110,7 +122,7 @@
                 </li>
               </ul>
 
-              <a href="#" class="btn btn-primary btn-block"><b>EDIT ACCOUNT</b></a>
+              <a href="<?php echo base_url().'web/edit_profile_asm' ?>" class="btn btn-primary btn-block"><b>EDIT ACCOUNT</b></a>
             </div>
     </section>
     <!-- /.content -->

@@ -37,11 +37,23 @@
           <ul class="nav navbar-nav">
             <!-- Notifications: style can be found in dropdown.less -->
             <li class="dropdown notifications-menu">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <i class="fa fa-bell-o"></i>
-                <span class="label label-warning">New</span>
-              </a>
-            </li>
+            <a href="<?php echo base_url().'web/notif' ?>" >
+              <i class="fa fa-bell-o"></i>
+              <?php 
+              $userdata = $this->session->userdata('email');
+              $koneksi = mysqli_connect("localhost","root","","newkmi");
+              $countnotif = mysqli_query($koneksi,"SELECT COUNT(email_track_2) AS 'nreq' FROM notifikasi WHERE status='unread' AND email_track_2 LIKE \"%$userdata%\"");
+              $countnotifvalue = mysqli_fetch_assoc($countnotif);
+              ?>
+
+              <?php if($countnotifvalue == 0) {?>
+                <span class="label label-warning"></span>
+              <?php } else {?>
+                <span class="label label-warning"><?php echo $printop = $countnotifvalue['nreq'] ?></span>
+              <?php } ?>
+              
+            </a>
+          </li>
             <!-- User Account: style can be found in dropdown.less -->
             <li class="dropdown user user-menu">
               <a href="<?php echo base_url().'web/profile' ?>" class="dropdown-toggle" data-toggle="dropdown">
@@ -66,9 +78,10 @@
           <li><a href="<?php echo base_url().'web/home' ?>"><i class="fa fa-table"></i> <span>Home</span></a></li>
           <li><a href="<?php echo base_url().'web/form' ?>"><i class="fa fa-files-o"></i> <span>Create New Form</span></a></li>
           <li><a href="<?php echo base_url().'web/change_status' ?>"><i class="fa fa-edit"></i> <span>Status Change</span></a></li>
-          <li><a href="<?php echo base_url().'web/inventory' ?>"><i class="fa fa-folder"></i> <span>Inventory</span></a></li>
+          <li><a href="<?php echo base_url().'web/inventory' ?>"><i class="fa fa-folder"></i> <span>Inventory</span></a></li> 
           <li><a href="<?php echo base_url().'web/statistics' ?>"><i class="ion ion-stats-bars"></i> <span>Statistics</span></a></li>
           <li><a href="<?php echo base_url().'web/history' ?>"><i class="fa fa-book"></i> <span>History</span></a></li>
+          <li><a href="<?php echo base_url().'web/manage_account' ?>"><i class="fa fa-wrench"></i> <span>Manage Account</span></a></li>
         </section>
         <!-- /.sidebar -->
       </aside>
@@ -110,94 +123,97 @@
             <!-- form start -->
             <form role="form" action="<?php echo base_url(). 'crud/form_update_process'; ?>" method="POST">
               <?php foreach ($form as $f): ?>
-              <div class="box-body">
-                <div class="form-group">
-                  <label for="noticket">No. Ticket</label>
-                  <input type="text" class="form-control" value="<?php echo $f->noticket ?>" name="noticket" readonly>
+                <div class="box-body">
+                  <div class="form-group">
+                    <label for="noticket">No. Ticket</label>
+                    <input type="text" class="form-control" value="<?php echo $f->noticket ?>" name="noticket" readonly>
+                  </div>
+                  <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" value="<?php echo $f->nama ?>" name="name" readonly>
+                  </div>
+                  <div class="form-group">
+                    <label for="from">From</label>
+                    <input type="text" class="form-control" value="<?php echo $f->dari ?>" name="from" readonly>
+                  </div>
+                  <div class="form-group">
+                    <label for="e_mail">E-mail</label>
+                    <input type="email" class="form-control" value="<?php echo $f->e_mail ?>" name="e_mail" readonly>
+                  </div>
+                  <div class="form-group">
+                    <label for="to">To</label>
+                    <input type="text" class="form-control" value="<?php echo $f->untuk ?>" name="to" readonly>
+                  </div>
+                  <div class="form-group">
+                    <label for="date">Date</label>
+                    <input type="date" class="form-control" value="<?php echo $f->date ?>" name="date" readonly>
+                  </div>
+                  <div class="form-group">
+                    <label for="case">Case</label>
+                    <input type="text" class="form-control" value="<?php echo $f->kasus ?>" name="case" readonly>
+                  </div>
+                  <div class="form-group">
+                    <label for="duty">duty</label>
+                    <input type="text" class="form-control" value="<?php echo $f->duty ?>" name="duty" readonly>
+                  </div>
+                  <div class="form-group">
+                    <label for="dateoec">Date of Expected Completion</label>
+                    <input type="date" class="form-control" value="<?php echo $f->dateoec ?>" name="dec" readonly>
+                  </div>
+                  <div class="form-group">
+                    <label for="si">System Integrated</label>
+                    <input type="text" class="form-control" value="<?php echo $f->systemint ?>" name="si" readonly>
+                  </div>
+                  <div class="form-group">
+                    <label for="urgency">Urgency</label>
+                    <input type="text" class="form-control" value="<?php echo $f->urgency ?>" name="urgency" readonly>
+                  </div>
+                  <div class="form-group">
+                    <label for="description">Description</label>
+                    <input type="text" class="form-control" value="<?php echo $f->description ?>" name="description" readonly>
+                  </div>
+                  <div class="form-group">
+                    <label for="">Approval Status</label>
+                    <input type="text" class="form-control" value="<?php echo $f->approvalstatus ?>" name="approvalstatus" readonly>
+                  </div>
+                  <div class="form-group">
+                    <label for="status">Status</label>
+                    <select class="form-control" name="status">
+                      <option value="<?php echo $f->process ?>" selected><?php echo $f->process ?></option>
+                      <option value="On Process">On Process</option>
+                      <option value="Done">Done</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="startdate">Start Date</label>
+                    <input type="date" class="form-control" value="<?php echo $f->startdate ?>" name="startdate">
+                  </div>
+                  <div class="form-group">
+                    <label for="starttime">Start Time</label>
+                    <input type="time" class="form-control" value="<?php echo $f->starttime ?>" name="starttime">
+                  </div>
+                  <div class="form-group">
+                    <label for="finisheddate">Finished Date</label>
+                    <input type="date" class="form-control" value="<?php echo $f->finisheddate ?>" name="finisheddate">
+                  </div>
+                  <!-- <div class="form-group">
+                    <label for="reason">Reason</label>
+                    <input type="text" class="form-control" value="<?php echo $f->reason ?>" name="reason" readonly>
+                  </div> -->
                 </div>
-                <div class="form-group">
-                  <label for="name">Name</label>
-                  <input type="text" class="form-control" value="<?php echo $f->nama ?>" name="name" readonly>
-                </div>
-                <div class="form-group">
-                  <label for="from">From</label>
-                  <input type="text" class="form-control" value="<?php echo $f->dari ?>" name="from" readonly>
-                </div>
-                <div class="form-group">
-                  <label for="e_mail">E-mail</label>
-                  <input type="email" class="form-control" value="<?php echo $f->e_mail ?>" name="e_mail" readonly>
-                </div>
-                <div class="form-group">
-                  <label for="to">To</label>
-                  <input type="text" class="form-control" value="<?php echo $f->untuk ?>" name="to" readonly>
-                </div>
-                <div class="form-group">
-                  <label for="date">Date</label>
-                  <input type="date" class="form-control" value="<?php echo $f->date ?>" name="date" readonly>
-                </div>
-                <div class="form-group">
-                  <label for="case">Case</label>
-                  <input type="text" class="form-control" value="<?php echo $f->kasus ?>" name="case" readonly>
-                </div>
-                <div class="form-group">
-                  <label for="duty">duty</label>
-                  <input type="text" class="form-control" value="<?php echo $f->duty ?>" name="duty" readonly>
-                </div>
-                <div class="form-group">
-                  <label for="dateoec">Date of Expected Completion</label>
-                  <input type="date" class="form-control" value="<?php echo $f->dateoec ?>" name="dec" readonly>
-                </div>
-                <div class="form-group">
-                  <label for="si">System Integrated</label>
-                  <input type="text" class="form-control" value="<?php echo $f->systemint ?>" name="si" readonly>
-                </div>
-                <div class="form-group">
-                  <label for="urgency">Urgency</label>
-                  <input type="text" class="form-control" value="<?php echo $f->urgency ?>" name="urgency" readonly>
-                </div>
-                <div class="form-group">
-                  <label for="description">Description</label>
-                  <input type="text" class="form-control" value="<?php echo $f->description ?>" name="description" readonly>
-                </div>
-                <div class="form-group">
-                  <label for="approvalstatus">Approval Status</label>
-                  <input type="text" class="form-control" value="<?php echo $f->approvalstatus ?>" name="approvalstatus" readonly>
-                </div>
-                <div class="form-group">
-                  <label for="">Approval Status</label>
-                  <input type="text" class="form-control" value="<?php echo $f->approvalstatus ?>" name="approvalstatus" readonly>
-                </div>
-                <div class="form-group">
-                  <label for="status">Status</label>
-                  <select class="form-control" name="status">
-                    <option value="<?php echo $f->process ?>" selected><?php echo $f->process ?></option>
-                    <option value="On Process">On Process</option>
-                    <option value="Done">Done</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="startdate">Start Date</label>
-                  <input type="date" class="form-control" value="<?php echo $f->startdate ?>" name="startdate">
-                </div>
-                <div class="form-group">
-                  <label for="starttime">Start Time</label>
-                  <input type="time" class="form-control" value="<?php echo $f->starttime ?>" name="starttime">
-                </div>
-                <div class="form-group">
-                  <label for="finisheddate">Finished Date</label>
-                  <input type="date" class="form-control" value="<?php echo $f->finisheddate ?>" name="finisheddate">
-                </div>
-                <div class="form-group">
-                  <label for="reason">Reason</label>
-                  <input type="text" class="form-control" value="<?php echo $f->reason ?>" name="reason" readonly>
-                </div>
-              </div>
-              <!-- /.box-body -->
+                <!-- /.box-body -->
 
-              <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <!-- <div class="box-footer">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div> -->
+                <div class="box-footer">
+                  <?php if($f->approvalstatus == "Approved by A. Manager" || $f->approvalstatus == "Approved by Dept. Head") {?>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  <?php } else {?>
+                    <a class="btn btn-primary disabled">Submit</a>
+                  <?php } ?>           
               </div>
-            <?php endforeach ?>
+              <?php endforeach ?>
             </form>
           </div>
           <!-- /.box -->
