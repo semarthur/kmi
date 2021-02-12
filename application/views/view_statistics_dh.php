@@ -37,9 +37,21 @@
         <ul class="nav navbar-nav">
           <!-- Notifications: style can be found in dropdown.less -->
           <li class="dropdown notifications-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <a href="<?php echo base_url().'web/notif_dh' ?>" >
               <i class="fa fa-bell-o"></i>
-              <span class="label label-warning">New</span>
+              <?php 
+              $userdata = $this->session->userdata('email');
+              $koneksi = mysqli_connect("localhost","root","","newkmi");
+              $countnotif = mysqli_query($koneksi,"SELECT COUNT(email_track_1) AS 'nreq' FROM notifikasi WHERE status='unread' AND email_track_1 LIKE \"%$userdata%\"");
+              $countnotifvalue = mysqli_fetch_assoc($countnotif);
+              ?>
+
+              <?php if($countnotifvalue == 0) {?>
+                <span class="label label-warning"></span>
+              <?php } else {?>
+                <span class="label label-warning"><?php echo $printop = $countnotifvalue['nreq'] ?></span>
+              <?php } ?>
+              
             </a>
           </li>
           <!-- User Account: style can be found in dropdown.less -->
@@ -131,7 +143,7 @@
                       echo mysqli_num_rows($jumlah_op);
                       ?>,
                       <?php 
-                      $jumlah_done = mysqli_query($koneksi,"select * from form_done where process='Done' AND MONTH(date) = month(CURRENT_DATE) AND dari LIKE \"%$departemen_sekarang_dh_stat%\"");
+                      $jumlah_done = mysqli_query($koneksi,"select * from form_done where process='Done' AND MONTH(created_at) = month(CURRENT_DATE) AND dari LIKE \"%$departemen_sekarang_dh_stat%\"");
                       echo mysqli_num_rows($jumlah_done);
                       ?>
                       ],

@@ -37,12 +37,23 @@
         <ul class="nav navbar-nav">
           <!-- Notifications: style can be found in dropdown.less -->
           <li class="dropdown notifications-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <a href="<?php echo base_url().'web/notif' ?>" >
               <i class="fa fa-bell-o"></i>
-              <span class="label label-warning">New</span>
+              <?php 
+              $userdata = $this->session->userdata('email');
+              $koneksi = mysqli_connect("localhost","root","","newkmi");
+              $countnotif = mysqli_query($koneksi,"SELECT COUNT(email_track_2) AS 'nreq' FROM notifikasi WHERE status='unread' AND email_track_2 LIKE \"%$userdata%\"");
+              $countnotifvalue = mysqli_fetch_assoc($countnotif);
+              ?>
+
+              <?php if($countnotifvalue == 0) {?>
+                <span class="label label-warning"></span>
+              <?php } else {?>
+                <span class="label label-warning"><?php echo $printop = $countnotifvalue['nreq'] ?></span>
+              <?php } ?>
+              
             </a>
           </li>
-          <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="<?php echo base_url().'web/profile' ?>" class="dropdown-toggle" data-toggle="dropdown">
               <span class="hidden-xs"><?php echo $this->session->userdata('email') ?></span>
@@ -69,6 +80,7 @@
         <li><a href="<?php echo base_url().'web/inventory' ?>"><i class="fa fa-folder"></i> <span>Inventory</span></a></li> 
         <li><a href="<?php echo base_url().'web/statistics' ?>"><i class="ion ion-stats-bars"></i> <span>Statistics</span></a></li>
         <li><a href="<?php echo base_url().'web/history' ?>"><i class="fa fa-book"></i> <span>History</span></a></li>
+        <li><a href="<?php echo base_url().'web/manage_account' ?>"><i class="fa fa-wrench"></i> <span>Manage Account</span></a></li>
     </section>
     <!-- /.sidebar -->
   </aside>
@@ -129,7 +141,7 @@
                       echo mysqli_num_rows($jumlah_op);
                       ?>,
                       <?php 
-                      $jumlah_done = mysqli_query($koneksi,"select * from form_done where process='Done' AND MONTH(date) = month(CURRENT_DATE)");
+                      $jumlah_done = mysqli_query($koneksi,"select * from form_done where process='Done' AND MONTH(created_at) = month(CURRENT_DATE)");
                       echo mysqli_num_rows($jumlah_done);
                       ?>
                       ],

@@ -1,3 +1,9 @@
+<?php
+if (isset($_GET['download'])) {
+  $params = "web/export_stiker?page=".$_GET['page'];
+  redirect(base_url().$params);
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,11 +43,23 @@
           <ul class="nav navbar-nav">
             <!-- Notifications: style can be found in dropdown.less -->
             <li class="dropdown notifications-menu">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <i class="fa fa-bell-o"></i>
-                <span class="label label-warning">New</span>
-              </a>
-            </li>
+            <a href="<?php echo base_url().'web/notif' ?>" >
+              <i class="fa fa-bell-o"></i>
+              <?php 
+              $userdata = $this->session->userdata('email');
+              $koneksi = mysqli_connect("localhost","root","","newkmi");
+              $countnotif = mysqli_query($koneksi,"SELECT COUNT(email_track_2) AS 'nreq' FROM notifikasi WHERE status='unread' AND email_track_2 LIKE \"%$userdata%\"");
+              $countnotifvalue = mysqli_fetch_assoc($countnotif);
+              ?>
+
+              <?php if($countnotifvalue == 0) {?>
+                <span class="label label-warning"></span>
+              <?php } else {?>
+                <span class="label label-warning"><?php echo $printop = $countnotifvalue['nreq'] ?></span>
+              <?php } ?>
+              
+            </a>
+          </li>
             <!-- User Account: style can be found in dropdown.less -->
             <li class="dropdown user user-menu">
               <a href="<?php echo base_url().'web/profile' ?>" class="dropdown-toggle" data-toggle="dropdown">
@@ -66,9 +84,10 @@
           <li><a href="<?php echo base_url().'web/home' ?>"><i class="fa fa-table"></i> <span>Home</span></a></li>
           <li><a href="<?php echo base_url().'web/form' ?>"><i class="fa fa-files-o"></i> <span>Create New Form</span></a></li>
           <li><a href="<?php echo base_url().'web/change_status' ?>"><i class="fa fa-edit"></i> <span>Status Change</span></a></li>
-          <li><a href="<?php echo base_url().'web/inventory' ?>"><i class="fa fa-folder"></i> <span>Inventory</span></a></li>
+          <li><a href="<?php echo base_url().'web/inventory' ?>"><i class="fa fa-folder"></i> <span>Inventory</span></a></li> 
           <li><a href="<?php echo base_url().'web/statistics' ?>"><i class="ion ion-stats-bars"></i> <span>Statistics</span></a></li>
           <li><a href="<?php echo base_url().'web/history' ?>"><i class="fa fa-book"></i> <span>History</span></a></li>
+          <li><a href="<?php echo base_url().'web/manage_account' ?>"><i class="fa fa-wrench"></i> <span>Manage Account</span></a></li>
         </section>
         <!-- /.sidebar -->
       </aside>
@@ -78,7 +97,7 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
-            Form Barang Masuk
+            Form Barang Masuk Overview
             <small>Inventory</small>
           </h1>
         </section>
@@ -88,15 +107,16 @@
           <!-- general form elements -->
           <div class="box box-primary">
             <div class="box-header with-border">
-              <h3 class="box-title">Form Barang Masuk</h3>
+              <h3 class="box-title">Form Barang Masuk Overview</h3>
             </div>
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" action="<?php echo base_url(). 'web/form_barang_masuk_overview'; ?>" method="GET">
+            <form role="form" action="" method="GET">
               <div class="box-body">
                 <div class="form-group">
                   <label for="name">Nama Barang</label>
                   <input type="text" class="form-control" name="namabarang" value="<?php echo $inventaris[0]->nama; ?>" readonly>
+                  <input type="text" value="stiker" name="page" hidden/>
                 </div>
                 <div class="form-group">
                   <label for="merk">Merk</label>
@@ -126,7 +146,7 @@
               <!-- /.box-body -->
 
               <div class="box-footer">
-                <button type="submit" class="btn btn-primary" value="download" name="download">Download</button>
+                <button type="submit" class="btn btn-primary" value="Download" name="download">Download</button>
               </div>
             </form>
           </div>

@@ -37,11 +37,23 @@
           <ul class="nav navbar-nav">
             <!-- Notifications: style can be found in dropdown.less -->
             <li class="dropdown notifications-menu">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <i class="fa fa-bell-o"></i>
-                <span class="label label-warning">New</span>
-              </a>
-            </li>
+            <a href="<?php echo base_url().'web/notif_asm' ?>" >
+              <i class="fa fa-bell-o"></i>
+              <?php 
+              $userdata = $this->session->userdata('email');
+              $koneksi = mysqli_connect("localhost","root","","newkmi");
+              $countnotif = mysqli_query($koneksi,"SELECT COUNT(email_track_1) AS 'nreq' FROM notifikasi WHERE status='unread' AND email_track_1 LIKE \"%$userdata%\"");
+              $countnotifvalue = mysqli_fetch_assoc($countnotif);
+              ?>
+
+              <?php if($countnotifvalue == 0) {?>
+                <span class="label label-warning"></span>
+              <?php } else {?>
+                <span class="label label-warning"><?php echo $printop = $countnotifvalue['nreq'] ?></span>
+              <?php } ?>
+              
+            </a>
+          </li>
             <!-- User Account: style can be found in dropdown.less -->
             <li class="dropdown user user-menu">
               <a href="<?php echo base_url().'web/profile_asm' ?>" class="dropdown-toggle" data-toggle="dropdown">
@@ -90,7 +102,7 @@
             </div>
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" action="<?php echo base_url(). 'crud/form_tambah'; ?>" method="POST">
+            <form role="form" action="<?php echo base_url(). 'crud/form_update_approval'; ?>" method="POST">
               <div class="box-body">
                 <div class="form-group">
                   <label for="noticket">No. Ticket</label>
@@ -142,7 +154,11 @@
                 </div>
                 <div class="form-group">
                   <label for="approvalstatus">Approval Status</label>
-                  <input type="text" class="form-control" name="approvalstatus" value="<?php echo $details[0]->approvalstatus; ?>" readonly>
+                  <select class="form-control" name="approvalstatus">
+                    <option value="<?php echo $details[0]->approvalstatus; ?>" selected><?php echo $details[0]->approvalstatus; ?></option>
+                    <option value="Approved by A. Manager">Approved by A. Manager</option>
+                    <!-- <option value="Not Approved">Not Approved</option> -->
+                  </select>
                 </div>
                 <div class="form-group">
                   <label for="process">Process</label>
@@ -160,15 +176,15 @@
                   <label for="finisheddate">Finished Date</label>
                   <input type="text" class="form-control" name="finisheddate" value="<?php echo $details[0]->finisheddate; ?>" readonly>
                 </div>
-                <div class="form-group">
+                <!-- <div class="form-group">
                   <label for="reason">Reason</label>
-                  <input type="text" class="form-control" name="reason" value="<?php echo $details[0]->reason; ?>" readonly>
-                </div>
+                  <textarea class="form-control" rows="3" placeholder="If not approved type your reason here . . ." name="alasan"></textarea>
+                </div> -->
               </div>
               <!-- /.box-body -->
 
               <div class="box-footer">
-                <a class="btn btn-primary">FORM REVISION</a> &nbsp <a class="btn btn-primary">DOWNLOAD AS FILE</a>
+                <button type="submit" class="btn btn-primary">APPROVE</button>
               </div>
             </form>
           </div>

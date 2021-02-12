@@ -39,14 +39,26 @@
         <ul class="nav navbar-nav">
           <!-- Notifications: style can be found in dropdown.less -->
           <li class="dropdown notifications-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <a href="<?php echo base_url().'web/notif' ?>" >
               <i class="fa fa-bell-o"></i>
-              <span class="label label-warning">New</span>
+              <?php 
+              $userdata = $this->session->userdata('email');
+              $koneksi = mysqli_connect("localhost","root","","newkmi");
+              $countnotif = mysqli_query($koneksi,"SELECT COUNT(email_track_2) AS 'nreq' FROM notifikasi WHERE status='unread' AND email_track_2 LIKE \"%$userdata%\"");
+              $countnotifvalue = mysqli_fetch_assoc($countnotif);
+              ?>
+
+              <?php if($countnotifvalue == 0) {?>
+                <span class="label label-warning"></span>
+              <?php } else {?>
+                <span class="label label-warning"><?php echo $printop = $countnotifvalue['nreq'] ?></span>
+              <?php } ?>
+              
             </a>
           </li>
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
-            <a href="<?php echo base_url().'web/profile' ?>" class="dropdown-toggle" data-toggle="dropdown">
+            <a href="<?php echo base_url().'web/profile' ?>" >
               <span class="hidden-xs"><?php echo $this->session->userdata('email') ?></span>
             </a>
           </li>
@@ -71,6 +83,7 @@
         <li><a href="<?php echo base_url().'web/inventory' ?>"><i class="fa fa-folder"></i> <span>Inventory</span></a></li> 
         <li><a href="<?php echo base_url().'web/statistics' ?>"><i class="ion ion-stats-bars"></i> <span>Statistics</span></a></li>
         <li><a href="<?php echo base_url().'web/history' ?>"><i class="fa fa-book"></i> <span>History</span></a></li>
+        <li><a href="<?php echo base_url().'web/manage_account' ?>"><i class="fa fa-wrench"></i> <span>Manage Account</span></a></li>
     </section>
     <!-- /.sidebar -->
   </aside>
@@ -159,14 +172,73 @@
       </div>
       <!-- /.row -->
       <div class="row">
+          <div class="col-xs-12">
+            <div class="box">
+              <div class="box-header">
+                <h3 class="box-title">Priority Recommendation using AHP (Analytical Hierarchy Process)</h3>
+              </div>
+              <form class="box-body" method="GET" action="<?=base_url()?>web/home_sorted_by_ahp">
+                <div class="col-md-12">
+                  <div class="row" style="height: 5em;">
+                    <div class="col-md-1">
+                      <h5>Jangka waktu pengerjaan</h5>
+                    </div>
+                    <div class="col-md-5" id="form-group" style="margin-top: auto; margin-bottom: auto;">
+                      <input id="datediff_urgency" name="datediff_urgency" style="width: 100%;" type="range" list="tickmarks" min="0" max="16" kriteria1="Jangka waktu pengerjaan" kriteria2="Urgensi" onchange="updateTextInput(this)">
+                    </div>
+                    <div class="col-md-1">
+                      <h5>Urgensi</h5>
+                    </div>
+                    <div class="col-md-5">
+                      <div id="datediff_urgency_alert" name="datediff_urgency_alert" class="alert alert-info" style="font-size: 90%"></div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-1">
+                      <h5>Jangka waktu pengerjaan</h5>
+                    </div>
+                    <div class="col-md-5" id="form-group">
+                      <input id="datediff_duty" name="datediff_duty" style="width: 100%;" type="range" list="tickmarks" min="0" max="16" kriteria1="Jangka waktu pengerjaan" kriteria2="Duty" onchange="updateTextInput(this)">
+                    </div>
+                    <div class="col-md-1">
+                      <h5>Duty</h5>
+                    </div>
+                    <div class="col-md-5">
+                      <div id="datediff_duty_alert" class="alert alert-info" style="font-size: 90%"></div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-1">
+                      <h5>Duty</h5>
+                    </div>
+                    <div class="col-md-5" id="form-group">
+                      <input id="duty_urgency" name="duty_urgency" style="width: 100%;" type="range" list="tickmarks" min="0" max="16" kriteria1="Duty" kriteria2="Urgensi" onchange="updateTextInput(this)">
+                    </div>
+                    <div class="col-md-1">
+                      <h5>Urgensi</h5>
+                    </div>
+                    <div class="col-md-5">
+                      <div id="duty_urgency_alert" class="alert alert-info" style="font-size: 90%"></div>
+                    </div>
+                  </div>
+                  <div class="col-2">
+                      <input type='submit' value="Submit" class="btn btn-primary" onclick="input()">
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="row">
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header">
               <h3 class="box-title">Status Check</h3>
+
             </div>
             <!-- /.box-header -->
             <div class="box-body table-responsive no-padding">
-              <table class="table table-hover" id="table1">
+              <table class="table table-hover" id="tablehome">
                 <thead>
                 <tr>
                   <th>No. Ticket</th>
@@ -177,13 +249,14 @@
                   <th>Case</th>
                   <th>Duty</th>
                   <th>Date of Expectancy Completion</th>
+                  <th>System Integrated</th>
                   <th>Urgency</th>
                   <th>Approval Status</th>
                   <th>Status</th>
                   <th>Action</th>
                 </tr>
                 </thead>
-                <tbody>  
+                <tbody>
                 <?php foreach ($form as $f) { ?>
                 <tr>
                   <td><?php echo $f->noticket ?></td>
@@ -194,12 +267,13 @@
                   <td><?php echo $f->kasus ?></td>
                   <td><?php echo $f->duty ?></td>
                   <td><?php echo $f->dateoec ?></td>
+                  <td><?php echo $f->systemint ?></td>
                   <td><?php echo $f->urgency ?></td>
                   <td><?php echo $f->approvalstatus ?></td>
                   <td><?php echo $f->process ?></td>
                   <td><a class="btn btn-block btn-xs" href="<?php echo base_url()?>web/see_details?noticket=<?php echo $f->noticket ?>"> SEE DETAILS </a></td>
                 </tr>
-                <?php } ?>
+                  <?php } ?>
                 </tbody>
               </table>
             </div>
@@ -229,8 +303,42 @@
   <script src="<?php echo base_url ('assets/template/bower_components/datatables.net-bs')?>/js/dataTables.bootstrap.min.js"></script>
 
   <script>
+          var datediff_urgency = document.getElementById("datediff_urgency");
+          var datediff_duty = document.getElementById("datediff_duty");
+          var duty_urgency = document.getElementById("duty_urgency");
+          
+          updateTextInput(datediff_urgency);
+          updateTextInput(datediff_duty);
+          updateTextInput(duty_urgency);
+
+                  
+          function changeValue(val) {
+            if (val == 8) {
+                return 1;
+            }else if (val > 8) {
+                return val - 7;
+            }else{
+              return Math.abs(val - 9);
+            }
+          }
+          
+          function updateTextInput(input) {
+            var kriteria = "";
+            if (input.value == 8) {
+              kriteria = "Keduanya sama-sama pentingnya";
+            }else if (input.value > 8) {
+              kriteria = "Kriteria " + input.getAttribute("kriteria2") +" lebih penting "  + changeValue(input.value) + " kali daripada " + input.getAttribute("kriteria1");
+            }else{
+              kriteria = "Kriteria " + input.getAttribute("kriteria1") +" lebih penting "  + changeValue(input.value) + " kali daripada " + input.getAttribute("kriteria2");
+            }
+            id_slider = input.getAttribute("id");
+            $('#' + id_slider + "_alert").html(kriteria);
+          }
+  </script>
+
+  <script>
     $(document).ready(function() {
-      $('#table1').DataTable()
+      $('#tablehome').DataTable()
     })
   </script>
 

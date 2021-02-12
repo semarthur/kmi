@@ -1,3 +1,9 @@
+<?php
+  if (isset($_GET['download'])) {
+    $params = "web/export?noticket=".$_GET['noticket']."&page=".$_GET['page'];
+    redirect(base_url().$params);
+  }
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,11 +43,23 @@
           <ul class="nav navbar-nav">
             <!-- Notifications: style can be found in dropdown.less -->
             <li class="dropdown notifications-menu">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <i class="fa fa-bell-o"></i>
-                <span class="label label-warning">New</span>
-              </a>
-            </li>
+            <a href="<?php echo base_url().'web/notif_dh' ?>" >
+              <i class="fa fa-bell-o"></i>
+              <?php 
+              $userdata = $this->session->userdata('email');
+              $koneksi = mysqli_connect("localhost","root","","newkmi");
+              $countnotif = mysqli_query($koneksi,"SELECT COUNT(email_track_1) AS 'nreq' FROM notifikasi WHERE status='unread' AND email_track_1 LIKE \"%$userdata%\"");
+              $countnotifvalue = mysqli_fetch_assoc($countnotif);
+              ?>
+
+              <?php if($countnotifvalue == 0) {?>
+                <span class="label label-warning"></span>
+              <?php } else {?>
+                <span class="label label-warning"><?php echo $printop = $countnotifvalue['nreq'] ?></span>
+              <?php } ?>
+              
+            </a>
+          </li>
             <!-- User Account: style can be found in dropdown.less -->
             <li class="dropdown user user-menu">
               <a href="<?php echo base_url().'web/profile_dh' ?>" class="dropdown-toggle" data-toggle="dropdown">
@@ -91,11 +109,12 @@
             </div>
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" action="<?php echo base_url(). 'crud/form_tambah'; ?>" method="POST">
+            <form role="form" action="" method="GET">
               <div class="box-body">
                 <div class="form-group">
                   <label for="noticket">No. Ticket</label>
                   <input type="text" class="form-control" name="noticket" value="<?php echo $details[0]->noticket; ?>" readonly>
+                  <input type="text" value="details" name="page" hidden/>
                 </div>
                 <div class="form-group">
                   <label for="Name">Name</label>
@@ -161,15 +180,19 @@
                   <label for="finisheddate">Finished Date</label>
                   <input type="text" class="form-control" name="finisheddate" value="<?php echo $details[0]->finisheddate; ?>" readonly>
                 </div>
-                <div class="form-group">
+                <!-- <div class="form-group">
                   <label for="reason">Reason</label>
                   <input type="text" class="form-control" name="reason" value="<?php echo $details[0]->reason; ?>" readonly>
                 </div>
-              </div>
+              </div> -->
               <!-- /.box-body -->
 
               <div class="box-footer">
-                <a class="btn btn-primary">FORM REVISION</a> &nbsp <a class="btn btn-primary">DOWNLOAD AS FILE</a>
+                  <?php if($details[0]->process == "Not Processed") {?>
+                    <a class="btn btn-primary" href="<?php echo base_url()?>web/form_revision_dh?noticket=<?php echo $details[0]->noticket ?>">FORM REVISION</a> &nbsp <input type="submit" value="Download" name="download" class="btn btn-primary">
+                  <?php } else {?>
+                    <a class="btn btn-primary disabled">FORM REVISION</a> &nbsp <input type="submit" value="Download" name="download" class="btn btn-primary">
+                  <?php } ?>           
               </div>
             </form>
           </div>
